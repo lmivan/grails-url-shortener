@@ -14,9 +14,20 @@ class UrlShortenerService {
 
     @PostConstruct
     public init() {
-        chars = grailsApplication.config.shortener.characters
-        minLength = grailsApplication.config.shortener.minLength
-        shortDomainUrl = grailsApplication.config.shortener.shortDomain
+        if (grailsApplication.config.shortener?.characters) {
+            chars = grailsApplication.config.shortener.characters
+        } else {
+            chars = ('0'..'9') + ('a'..'h') + ('j'..'k') + ('m'..'z') + ('A'..'H') + ('J'..'K') +
+                 ('M'..'Z')
+        }
+
+        if (grailsApplication.config.shortener?.minLength) {
+            minLength = grailsApplication.config.shortener.minLength
+        } else {
+            minLength = 5
+        }
+
+        shortDomainUrl = grailsApplication.config.shortener?.shortDomain
     }
 
     /**
@@ -41,6 +52,7 @@ class UrlShortenerService {
         if (!shortenInstance.hasErrors()) {
             return shortUrl
         } else {
+            log.error "ERROR UrlShortener : Errors saving Short Url Instance"
             return null
         }
     }
@@ -54,9 +66,10 @@ class UrlShortenerService {
     public String shortUrlFullDomain(String targetUrl) {
         def shortUrl = this.shortUrl(targetUrl)
 
-        if (shortUrl) {
+        if (shortDomainUrl && shortUrl) {
             return "${shortDomainUrl}/${shortUrl}"
         } else {
+            log.error "ERROR UrlShortener : Impossible to generate short url. See 'shortDomainUrl' parameter config or ShortUrl saving errors"
             return null
         }
     }
