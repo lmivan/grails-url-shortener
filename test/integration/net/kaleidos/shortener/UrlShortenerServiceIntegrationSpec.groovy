@@ -128,4 +128,93 @@ class UrlShortenerServiceIntegrationSpec extends IntegrationSpec {
         then:
             targetUrl == null
     }
+
+    void 'control config not defined'() {
+        setup:
+            grailsApplication.config.shortener = null
+            urlShortenerService.init()
+
+        when:
+            def result = urlShortenerService.shortUrl(targetUrl)
+
+        then:
+            result != null
+            result.size() == 5
+
+        expect:
+             null == urlShortenerService.shortUrlFullDomain(targetUrl)
+
+        where:
+            targetUrl = "http://kaleidos.net"
+    }
+
+    void 'control shortDomain parameter not defined'() {
+        setup:
+            grailsApplication.config.shortener =
+            [
+                characters : ('0'..'9') + ('a'..'h') + ('j'..'k') + ('m'..'z') + ('A'..'H') +
+                    ('J'..'K') + ('M'..'Z'),
+                minLength : 3,
+            ]
+            urlShortenerService.init()
+
+        expect:
+            null == urlShortenerService.shortUrlFullDomain(targetUrl)
+
+        where:
+            targetUrl = "http://kaleidos.net"
+    }
+
+    void 'control config chars not defined'() {
+        setup:
+            grailsApplication.config.shortener =
+            [
+                minLength : 3,
+                shortDomain : "short"
+            ]
+            urlShortenerService.init()
+
+        when:
+            def result = urlShortenerService.shortUrl(targetUrl)
+
+        then:
+            result != null
+            result.size() == 3
+
+        when:
+            result = urlShortenerService.shortUrlFullDomain(targetUrl)
+
+        then:
+            result.contains(grailsApplication.config.shortener.shortDomain)
+
+        where:
+            targetUrl = "http://kaleidos.net"
+    }
+
+    void 'control config minLength not defined'() {
+        setup:
+            grailsApplication.config.shortener =
+            [
+                characters : ('0'..'9') + ('a'..'h') + ('j'..'k') + ('m'..'z') + ('A'..'H') +
+                    ('J'..'K') + ('M'..'Z'),
+                shortDomain : "short"
+            ]
+            urlShortenerService.init()
+
+        when:
+            def result = urlShortenerService.shortUrl(targetUrl)
+
+        then:
+            result != null
+            result.size() == 5
+
+        when:
+            result = urlShortenerService.shortUrlFullDomain(targetUrl)
+
+        then:
+            result.contains(grailsApplication.config.shortener.shortDomain)
+
+        where:
+            targetUrl = "http://kaleidos.net"
+    }
 }
