@@ -1,6 +1,6 @@
 class UrlShortenerGrailsPlugin {
     // the plugin version
-    def version = "0.1"
+    def version = "0.2-SNAPSHOT"
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "2.0 > *"
     // the other plugins this plugin depends on
@@ -8,7 +8,6 @@ class UrlShortenerGrailsPlugin {
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
         "grails-app/views/error.gsp",
-        "grails-app/taglib/**",
         "grails-app/utils/**"
     ]
 
@@ -30,6 +29,8 @@ This is a grails plugin that integrates a custom url shortener inside your Grail
     // Details of company behind the plugin (if there is one)
     def organization = [ name: "Kaleidos", url: "http://kaleidos.net" ]
 
+    def developers = [ [ name: "Goran Ehrsson", email: "goran@technipelago.se" ]]
+
     // Location of the plugin's issue tracker.
     def issueManagement = [ system: "GITHUB", url: "https://github.com/lmivan/grails-url-shortener/issues" ]
 
@@ -38,17 +39,8 @@ This is a grails plugin that integrates a custom url shortener inside your Grail
 
     def doWithSpring = {
         def shortenerConfig = application.config.shortener
-
-        if (!shortenerConfig.characters) {
-            log.error "ERROR: UrlShortener characters to generate the urls not found. The property shortener.characters must be defined in Config.groovy"
-        }
-        if (!shortenerConfig.minLength) {
-            log.error "ERROR: UrlShortener minimum length not found. The property shortener.minLength must be defined in Config.groovy"
-        }
         if (!shortenerConfig.shortDomain) {
             log.error "ERROR: UrlShortener short domain not found. The property shortener.shortDomain must be defined in Config.groovy"
         }
-
-        sequenceGenerator(net.kaleidos.shortener.generator.DummySequenceGenerator)
     }
 }

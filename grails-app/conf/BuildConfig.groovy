@@ -14,21 +14,16 @@ grails.project.dependency.resolution = {
     }
 
     plugins {
-        build(":tomcat:$grailsVersion",
-              ":release:2.2.0",
-              ":rest-client-builder:1.0.3") {
+        build(":tomcat:7.0.55",
+              ":release:3.0.1") {
             export = false
         }
 
-        test ":spock:0.7", {
+        compile(":guard:2.1.0") {
             export = false
         }
 
-        compile (":guard:1.0.7") {
-            export = false
-        }
-
-        runtime ":hibernate:$grailsVersion", {
+        runtime(":hibernate4:4.3.6.1") {
             export = false
         }
     }

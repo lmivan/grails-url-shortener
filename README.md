@@ -64,6 +64,12 @@ sequenceGenerator(com.example.shortener.PostgresSequenceGenerator) {
 }
 ```
 
+### Sequence Generator Plugin
+
+You can also use the [sequence-generator](http://grails.org/plugin/sequence-generator) plugin to generate sequence numbers for short urls.
+Version 1.1+ of `sequence-generator` is compatible with version 0.2+ of `url-shortener`. Just add the `sequence-generator` plugin to
+your BuildConfig.groovy and you are ready to go.
+You don't have to create a custom generator or configure a sequenceGenerator bean (section above), it done by the `sequence-generator` plugin.
 
 ## Usage
 
@@ -89,6 +95,16 @@ assert urlShortenerService.getTargetUrl(shortUrl) == "http://kaleidos.net"
 
 The plugin also provides a controller that can be used to redirect to the target url. It is available here [ShortenerController](https://github.com/lmivan/grails-url-shortener/blob/master/grails-app/controllers/net/kaleidos/shortener/ShorternerController.groovy) or you can implement your own custom controller.
 
+### Tag Library
+
+The plugin provides two GSP tags that generate short urls, `link` and `createLink`. They work as the standard Grails `link` and `createLink` but generates short urls.
+
+```javascript
+function copyShortLinkToClipboard() {
+    var url = "${shorter.createLink(controller: 'person', action: 'show', id: person.id, absolute: true)}";
+    window.prompt("${message(code: 'copy.to.clipboard.label', 'Copy to clipboard: Ctrl+C, Enter')}", url);
+}
+```
 
 ## Author
 
@@ -101,4 +117,5 @@ Collaborations are appreciated :-)
 
 ## Release Notes
 
+* 0.2 - 21/Nov/2014 - Added GSP tags `shorter:link` and `shorter:createLink`.
 * 0.1 - 17/Oct/2013 - Initial version of the plugin.

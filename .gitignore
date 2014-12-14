@@ -5,3 +5,5 @@ target
 *.zip
 plugin.xml
 *sublime*
+.idea
+*.iml

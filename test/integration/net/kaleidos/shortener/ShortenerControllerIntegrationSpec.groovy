@@ -1,7 +1,6 @@
 package net.kaleidos.shortener
 
-import grails.plugin.spock.*
-import spock.lang.*
+import grails.test.spock.IntegrationSpec
 
 class ShortenerControllerIntegrationSpec extends IntegrationSpec {
 

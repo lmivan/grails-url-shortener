@@ -14,8 +14,21 @@ class UrlShortenerService {
 
     @PostConstruct
     public init() {
-        chars = grailsApplication.config.shortener.characters
-        minLength = grailsApplication.config.shortener.minLength
+        if (grailsApplication.config.shortener.characters) {
+            chars = grailsApplication.config.shortener.characters
+        } else {
+            chars = ['d', '2', 'C', 'S', 'Y', 'v', 'K', '5', 'p', '9', 't', 'k', 'R',
+                          'X', 's', '1', 'N', 'c', 'w', 'F', 'q', 'G', 'T', 'J', 'H', '7',
+                          'h', 'D', 'B', 'Z', 'j', 'n', '4', '6', 'b', 'z', '3', '8', 'V',
+                          'M', 'g', 'm', 'W', 'f', 'y', 'r', '0', 'x', 'P', 'Q']
+        }
+
+        if (grailsApplication.config.shortener.minLength) {
+            minLength = grailsApplication.config.shortener.minLength
+        } else {
+            minLength = 4
+        }
+
         shortDomainUrl = grailsApplication.config.shortener.shortDomain
     }
 
